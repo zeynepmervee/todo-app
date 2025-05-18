@@ -1,56 +1,69 @@
-let tasks = [];
-let currentId = 1;
+import Task from '../models/Task.js';
 
-export function getTasks(req, res) {
-  res.json(tasks);
+export async function getTasks(req, res) {
+  try {
+    const tasks = await Task.findAll();
+    res.json(tasks);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch tasks' });
+  }
 }
 
-export function addTask(req, res) {
+export async function addTask(req, res) {
   const { title } = req.body;
   if (!title || title.trim() === '') {
     return res.status(400).json({ error: 'Task title is required' });
   }
 
-  const newTask = {
-    id: currentId++,
-    title: title.trim(),
-    completed: false
-  };
-
-  tasks.push(newTask);
-  res.status(201).json(newTask);
+  try {
+    const newTask = await Task.create({
+      title: title.trim(),
+      completed: false
+    });
+    res.status(201).json(newTask);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create task' });
+  }
 }
 
-export function deleteTask(req, res) {
+export async function deleteTask(req, res) {
   const id = parseInt(req.params.id);
-  const index = tasks.findIndex(task => task.id == id);
-  if (index === -1) {
-    return res.status(404).json({ error: 'Task not found' });
+  try {
+    const deleted = await Task.destroy({
+      where: { id }
+    });
+    if (!deleted) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete task' });
   }
-
-  tasks.splice(index, 1);
-  res.status(204).send();
 }
 
-export function updateTask(req, res) {
+export async function updateTask(req, res) {
   const id = parseInt(req.params.id);
-  const task = tasks.find(task => task.id == id);
-  if (!task) {
-    return res.status(404).json({ error: 'Task not found' });
-  }
-
   const { title, completed } = req.body;
-  if (title !== undefined) task.title = title;
-  if (completed !== undefined) task.completed = completed;
 
-  res.json(task);
+  try {
+    const task = await Task.findByPk(id);
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+
+    if (title !== undefined) task.title = title;
+    if (completed !== undefined) task.completed = completed;
+    
+    await task.save();
+    res.json(task);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to update task' });
+  }
 }
 
-export const _internal = {};
-Object.defineProperty(_internal, 'tasks', {
-  get: () => tasks
-});
-_internal.resetTasks = () => {
-  tasks = [];
-  currentId = 1;
+// For testing purposes only
+export const _internal = {
+  resetTasks: async () => {
+    await Task.destroy({ where: {} });
+  }
 };

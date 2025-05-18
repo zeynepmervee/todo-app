@@ -8,7 +8,7 @@ This project is a simple ToDo application developed using Node.js and Express. I
 
 - ✅ RESTful API built with Express.js
 - ✅ HTML + JavaScript frontend (public/index.html)
-- ✅ In-memory task storage (no database required)
+- ✅ Persistent task storage using SQLite (via Sequelize ORM)
 - ✅ Unit tests using Jest
 - ✅ API tests using Supertest
 - ✅ Selenium-based UI automation test
@@ -25,9 +25,17 @@ npm start
 ```
 
 This will:
-1. Run all unit tests
+1. Run all unit tests (using a clean SQLite database for each run)
 2. Start the Express server at `http://localhost:5000`
 3. Serve the frontend via `public/index.html`
+
+---
+
+## 🗄️ Database
+
+- The app uses **SQLite** for persistent storage, managed via **Sequelize** ORM.
+- The database file is created automatically at `backend/database.sqlite`.
+- No manual setup is required; tables are created automatically on first run.
 
 ---
 
@@ -67,6 +75,8 @@ node uiTest.js
 
 - Node.js
 - Express
+- Sequelize (ORM)
+- SQLite
 - Jest
 - Supertest
 - Selenium WebDriver
@@ -79,3 +89,5 @@ node uiTest.js
 
 > This project was built for learning and demonstration purposes, focusing on testing, API validation, and frontend-backend integration.  
 > **All code, test cases, and automation scripts were written by the student.**
+> 
+> **Note:** The app was refactored to use SQLite via Sequelize for persistent storage instead of in-memory arrays. All tests and endpoints now operate on the database.

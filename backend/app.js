@@ -25,4 +25,10 @@ app.get('/', (req, res) => {
   res.sendFile(join(__dirname, '../frontend/index.html'));
 });
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: 'Something went wrong!' });
+});
+
 export default app;
