@@ -50,12 +50,42 @@
       justify-content: space-between;
       align-items: center;
     }
+    .task-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+    .task-title {
+      flex: 1;
+      word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+      min-width: 0;
+    }
+    .completed {
+      text-decoration: line-through;
+      color: #888;
+    }
+    .task-actions {
+      display: flex;
+      gap: 5px;
+    }
+    .edit-btn {
+      background: #3498db;
+    }
     .delete-btn {
       background: #e74c3c;
-      color: white;
-      border: none;
-      border-radius: 3px;
-      padding: 0.3rem 0.6rem;
+    }
+    .edit-input {
+      width: 100%;
+      margin: 0;
+    }
+    .checkbox {
+      width: 18px;
+      height: 18px;
       cursor: pointer;
     }
   </style>

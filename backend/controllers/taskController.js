@@ -61,7 +61,6 @@ export async function updateTask(req, res) {
   }
 }
 
-// For testing purposes only
 export const _internal = {
   resetTasks: async () => {
     await Task.destroy({ where: {} });

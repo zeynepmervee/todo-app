@@ -43,7 +43,6 @@ describe('Task Controller', () => {
   });
 
   test('should get all tasks', async () => {
-    // Create a test task first
     await Task.create({ title: 'Test Task', completed: false });
     
     await getTasks(req, res);
@@ -53,7 +52,6 @@ describe('Task Controller', () => {
   });
 
   test('should delete a task', async () => {
-    // Create a test task first
     const task = await Task.create({ title: 'To Delete', completed: false });
     
     req = { params: { id: task.id } };
@@ -62,7 +60,6 @@ describe('Task Controller', () => {
   });
 
   test('should update a task', async () => {
-    // Create a test task first
     const task = await Task.create({ title: 'Old', completed: false });
     
     req = { 
@@ -73,6 +70,36 @@ describe('Task Controller', () => {
     expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
       title: 'Updated',
       completed: true
+    }));
+  });
+  
+  test('should return 404 if task to update does not exist', async () => {
+    req = {
+      params: { id: 999 },
+      body: { title: 'Updated Title' }
+    };
+    await updateTask(req, res);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Task not found' });
+  });
+
+  test('should return 404 if task to delete does not exist', async () => {
+    req = { params: { id: 999 } };
+    await deleteTask(req, res);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ error: 'Task not found' });
+  });
+
+  test('should accept and store a very long task title', async () => {
+    const longTitle = 'A'.repeat(1000);
+    req = { body: { title: longTitle } };
+
+    await addTask(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+      title: longTitle,
+      completed: false
     }));
   });
 });

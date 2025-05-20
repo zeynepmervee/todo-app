@@ -1,6 +1,6 @@
 # 📝 ToDo App (Full-Stack Testable Application)
 
-This project is a simple ToDo application developed using Node.js and Express. It is fully testable and includes both backend and frontend components.
+This project is a simple and testable ToDo application developed using Node.js, Express, and SQLite. It includes a basic backend with RESTful API endpoints and a user interface created using HTML, CSS, and JavaScript. The project focuses on CRUD operations for managing tasks and includes backend unit tests with Jest, UI tests with Selenium, and API tests using Postman.
 
 ---
 
